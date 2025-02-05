@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block body %}
+<section id="qr-code-scanner">
+    <div>
+        <div class="header flex">
+            <h3>QR Code Scanner</h3>
+            <a class="btn radius" href="manage-records">Back</a>
+        </div>
+        <div class="radius body">
+            <div class="radius video-con">
+                <video class="radius" id="video" autoplay playsinline></video>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+<!-- Then load your custom JS file -->
+<script src="{{ url_for('static', filename='js/qr-scanner.js') }}"></script>
+{% endblock %}

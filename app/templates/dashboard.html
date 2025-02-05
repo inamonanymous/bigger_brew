@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% block body %}
+<section id="dashboard">
+    <div>
+        <div class="radius manage-records navigation">
+            <h2>View/Manage Employee Attendance Records</h2>
+            <a href="/manage-records" class="btn radius">View</a>
+        </div>
+        <div class="radius add-employee navigation">
+            <h2>Add Employee</h2>
+            
+            <a href="#" id="open-add-employee-modal" class="btn radius">Add</a>
+        </div>
+        <div class="radius manage-inventory navigation">
+            <h2>View/Manage Inventory</h2>
+            <a href="/manage-inventory" class="btn radius">Add</a>
+        </div>
+
+        <div class="add-employee-modal radius" id="employeeModal">
+            <span class="close" id="closeModal">X</span>
+            {% include 'create-user.html' %}
+        </div>
+    </div>
+</section>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

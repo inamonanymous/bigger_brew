@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% block body %}
+<section id="attendance-rercords-without-checkout">
+    <div class="body radius">
+        <div>
+            <h1>Attendance Records Without Checkout</h1>
+            <h2>Date: {{ specific_date }}</h2>
+            {% if message %}
+                <p>{{ message }}</p>
+            {% else %}
+        </div>
+            <div class="table-wrapper radius">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="radius">User ID</th>
+                            <th class="radius">Check-In Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.user_id }}</td>
+                            <td>{{ record.check_in_time.strftime('%B %d, %Y %I:%M %p') }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-con">
+                <a href="{{ url_for('main.export_attendance_xlsx', date=specific_date) }}" class="btn radius yellow">
+                    Export to XLSX
+                </a>
+                <a href="{{ url_for('main.manage_records') }}" class="btn radius">
+                    Back
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
