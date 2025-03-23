@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Manage Attendance</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="../static/assets/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../static/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="../static/assets/css/demo.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="red">
+            <a href="/dashboard" class="logo">
+              Sip N' Takoyaki
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item">
+                <a
+                  data-bs-toggle="collapse"
+                  href="#dashboard"
+                  class="collapsed"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-home"></i>
+                  <p>Dashboard</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="/dashboard">
+                        <span class="sub-item">Dashboard</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+
+              
+              
+              {% if current_user.role =="Employee" %}
+              {% endif %}
+
+              <li class="nav-item active submenu">
+                <a data-bs-toggle="collapse" href="#tables">
+                  <i class="fas fa-table"></i>
+                  <p>Manage Records</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse show" id="tables">
+                  <ul class="nav nav-collapse">
+                    <li class="active">
+                      <a href="/manage-attendance">
+                        <span class="sub-item">Manage Attendance</span>
+                      </a>
+                    </li>
+                    {% if current_user.role =="Admin" %}
+                      <li>
+                        <a href="/manage-employees">
+                          <span class="sub-item">Manage Employees</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/qr-code-scanner">
+                          <span class="sub-item">QR Code Scanner</span>
+                        </a>
+                      </li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </li>
+              
+              <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#inventory">
+                    <i class="fas fa-table"></i>
+                    <p>Manage Inventory</p>
+                    <span class="caret"></span>
+                  </a>
+                  <div class="collapse" id="inventory">
+                    <ul class="nav nav-collapse">
+                      <li>
+                        <a href="/manage-inventory">
+                          <span class="sub-item">Inventory</span>
+                        </a>
+                      </li>
+                      <li >
+                        <a href="/manage-categories">
+                          <span class="sub-item">Categories</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/manage-inventory-log">
+                          <span class="sub-item">Logs</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+              </li>              
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="/" class="logo">
+                <img
+                  src="../static/assets/img/kaiadmin/logo_light.svg"
+                  alt="navbar brand"
+                  class="navbar-brand"
+                  height="20"
+                />
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+            <div class="container-fluid">
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+                      <img
+                        src="../static/assets/img/profile.jpg"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                    <span class="profile-username">
+                      <span class="op-7">Hi,</span>
+                      <span class="fw-bold text-capitalize">{{ current_user.firstname }}</span>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <div class="user-box">
+                          <div class="avatar-lg">
+                            <img
+                              src="../static/assets/img/profile.jpg"
+                              alt="image profile"
+                              class="avatar-img rounded"
+                            />
+                          </div>
+                          <div class="u-text">
+                            <h4>{{ current_user.firstname }}</h4>
+                            <p class="text-muted">{{ current_user.username }}</p>
+                            <a
+                              href="/profile"
+                              class="btn btn-xs btn-secondary btn-sm"
+                              >View Profile</a
+                            >
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+        <div class="container">
+          <div class="page-inner">
+              <div class="page-header">
+                  <h3 class="fw-bold mb-3">Manage Records</h3>
+                  <ul class="breadcrumbs mb-3">
+                      <li class="nav-home">
+                          <a href="#">
+                              <i class="icon-home"></i>
+                          </a>
+                      </li>
+                      <li class="separator">
+                          <i class="icon-arrow-right"></i>
+                      </li>
+                      <li class="nav-item">
+                          <a href="#">Manage Records</a>
+                      </li>
+                      <li class="separator">
+                          <i class="icon-arrow-right"></i>
+                      </li>
+                      <li class="nav-item">
+                          <a href="#">Manage attendance</a>
+                      </li>
+                  </ul>
+              </div>
+      
+              <div class="row">
+                  <div class="col-md-12">
+                      <!-- Attendance Records Each Day -->
+                      <div class="card">
+                          <div class="card-header">
+                              <h4 class="card-title">Attendance Records Each Day</h4>
+                          </div>
+                          <div class="card-body">
+                              <div class="table-responsive">
+                                  <table id="attendance-day" class="display table table-striped table-hover">
+                                      <thead>
+                                          <tr>
+                                              <th>Attendance Record Date</th>
+                                              <th>Action</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          {% for i in dates %}
+                                          <tr class="attendance-row" data-date="{{ i }}">
+                                              <td class="format-date">{{ i }}</td>
+                                              <td>
+                                                <button class="btn btn-warning btn-sm view-employee-report" data-date="{{ i }}">
+                                                  View
+                                                </button>
+                                                {% if current_user.role =="Admin" %}
+                                                  <button class="btn btn-danger btn-sm delete-attendances" data-date="{{ i }}">
+                                                    Delete
+                                                  </button>
+                                                {% endif %}
+                                              </td>
+                                          </tr>
+                                          {% endfor %}
+                                      </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="card" id="attendance-report-card" style="display: none;">
+                        <div class="card-header">
+                            <h4 class="card-title">Attendance Report for <span id="selected-date1"></span></h4>
+                            <span class="badge bg-info" id="checkout-type">Showing: Present & Absent Employees</span>
+                              <a href="{{ url_for('main.export_attendance_report_xlsx', date=specific_date) }}" class="btn btn-sm btn-secondary export report">
+                                Export to XLSX
+                              </a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="attendance-report" class="display table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Employee Name</th>
+                                            <th>Employee Status</th>
+                                            <th>Check-in Time</th>
+                                            <th>Check-out Time</th>
+                                            <th>Time Spent</th>
+                                            <th>Attendance Status</th>
+                                            {% if current_user.role =="Admin" %}
+                                              <th>Action</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data Injected Here -->
+                                    </tbody>
+                                    <tfoot>
+                                      <tr>
+                                          <th></th>
+                                          <th></th>
+                                          <th></th>
+                                          <th></th>
+                                          <th></th>
+                                          <th></th>
+                                          {% if current_user.role =="Admin" %}
+                                              <th></th>
+                                          {% endif %}
+                                      </tr>
+                                  </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                      </div>
+                    
+                  </div>
+              </div>
+          </div>
+        </div>
+      
+
+        <footer class="footer">
+          <div class="container-fluid d-flex justify-content-between">
+            <nav class="pull-left">
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    Sip N' Takoyaki
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Help </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Licenses </a>
+                </li>
+              </ul>
+            </nav>
+            <div class="copyright">
+              2025
+            </div>
+            <div>
+              Distributed by
+              <a target="_blank" href="#">Lunzaga, Mallari, Masongsong</a>.
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      <!-- End Custom template -->
+    </div>
+    <!--   Core JS Files   -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../static/js/script.js"></script>
+    <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../static/assets/js/core/popper.min.js"></script>
+    <script src="../static/assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../static/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <!-- Datatables -->
+    <script src="../static/assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Kaiadmin JS -->
+    <script src="../static/assets/js/kaiadmin.min.js"></script>
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="../static/assets/js/setting-demo2.js"></script>
+    
+    <script>
+      function deleteAttendance(attendanceId) {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to recover this attendance record!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  fetch(`/delete-one-attendance/${attendanceId}`, {
+                      method: "DELETE",
+                      headers: {
+                          "Content-Type": "application/json"
+                      }
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                        Swal.fire("Deleted!", data.message, "success");
+                  })
+                  .catch(error => {
+                      Swal.fire("Error!", "Something went wrong. Please try again.", "error");
+                      console.error("Error deleting attendance:", error);
+                  });
+              }
+          });
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+
+        
+
+
+        function formatDate(dateString) {
+            let date = new Date(dateString);
+            if (isNaN(date)) return dateString;
+            return date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
+        }
+
+        function formatTimeSpent(timeString) {
+            if (!timeString) return "N/A"; // Handle null values
+
+            // Split time into hours, minutes, and seconds
+            let [hours, minutes, seconds] = timeString.split(":").map(Number);
+
+            // Build the formatted output
+            let formattedTime = [];
+            if (hours > 0) formattedTime.push(`${hours} hour${hours > 1 ? "s" : ""}`);
+            if (minutes > 0) formattedTime.push(`${minutes} minute${minutes > 1 ? "s" : ""}`);
+            if (seconds > 0) formattedTime.push(`${seconds} second${seconds > 1 ? "s" : ""}`);
+
+            return formattedTime.length > 0 ? formattedTime.join(", ") : "0 seconds";
+        }
+
+
+
+        function formatDateTime(dateString) {
+            if (!dateString) return "N/A"; // Handle null values
+            let date = new Date(dateString);
+            if (isNaN(date)) return dateString; // Return as is if invalid
+
+            return date.toLocaleString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true, // Enable 12-hour format with AM/PM
+                timeZone: "Asia/Manila" // Adjust to your timezone
+            });
+        }
+
+        function fetchAttendanceReport(date) {
+          fetch(`/api/attendance/report?date=${date}`)
+              .then(response => response.json())
+              .then(data => {
+                  if (data.present && data.absent) {
+                      populateAttendanceReportTable(data.present, data.absent, date);
+                  } else {
+                      alert(`No data found for ${formatDate(date)}.`);
+                  }
+              })
+              .catch(error => console.error("Error fetching attendance report:", error));
+      }
+
+        function populateAttendanceReportTable(present, absent, date) {
+          document.getElementById("selected-date1").innerText = formatDate(date);
+          document.getElementById("checkout-type").innerText = "Showing: Present & Absent Employees";
+
+          const tableBody = document.querySelector("#attendance-report tbody");
+          tableBody.innerHTML = ""; 
+
+          const exportBtn = document.querySelector(".btn.btn-sm.btn-secondary.export.report");
+          exportBtn.href = `/export/attendance_report_xlsx?date=${date}`;
+
+          present.forEach(emp => {
+              let row = `<tr>
+                  <td>${emp.fullname}</td>
+                  <td>Present</td>
+                  <td class="format-date-time">${formatDateTime(emp.check_in_time)}</td>
+                  <td class="format-date-time">${emp.check_out_time ? formatDateTime(emp.check_out_time) : "N/A"}</td>
+                  <td class="">${formatTimeSpent(emp.time_spent)}</td>
+                  <td class="format-date-time">${emp.status}</td>
+                  {% if current_user.role =="Admin" %}
+                    <td>
+                          <button class="btn btn-sm btn-danger delete-attendance" onclick="deleteAttendance(${emp.attendance_id})">Delete</button>
+                    </td>
+                  {% endif %}
+              </tr>`;
+              tableBody.innerHTML += row;
+          });
+
+          absent.forEach(emp => {
+              let row = `<tr>
+                  <td>${emp.fullname}</td>
+                  <td>Absent</td>
+                  <td>N/A</td>
+                  <td>N/A</td>
+                  <td>N/A</td>
+                  <td>N/A</td>
+                  {% if current_user.role =="Admin" %}
+                    <td>N/A</td>
+                  {% endif %}
+              </tr>`;
+              tableBody.innerHTML += row;
+          });
+
+            document.getElementById("attendance-report-card").style.display = "block";
+
+              // ✅ Destroy and reinitialize DataTables properly
+              if ($.fn.DataTable.isDataTable("#attendance-report")) {
+                  $("#attendance-report").DataTable().destroy();
+              }
+
+              // Initialize DataTable
+              var table = $("#attendance-report").DataTable({
+                  order: [[1, "asc"]],
+                  columnDefs: [{ orderable: false, targets: [2, 3] }], // Disable sorting for check-in/check-out times
+                  paging: true,
+                  searching: true,
+                  initComplete: function () {
+                      this.api()
+                          .columns()
+                          .every(function () {
+                              var column = this;
+                              var headerText = $(column.header()).text().trim(); // Get column header text
+
+                              // Create dropdown select
+                              var select = $('<select class="form-select"><option value="">All ' + headerText + '</option></select>')
+                                  .appendTo($(column.footer()).empty()) // Append to column footer
+                                  .on("change", function () {
+                                      var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                      column.search(val ? "^" + val + "$" : "", true, false).draw();
+                                  });
+
+                              // Populate dropdown with unique values
+                              column
+                                  .data()
+                                  .unique()
+                                  .sort()
+                                  .each(function (d, j) {
+                                      if (d.trim() !== "") {
+                                          select.append('<option value="' + d + '">' + d + "</option>");
+                                      }
+                                  });
+                          });
+                  }
+              });
+            }
+            
+
+        document.querySelectorAll(".view-employee-report").forEach(button => {
+          button.addEventListener("click", function () {
+            let date = this.getAttribute("data-date");
+            fetchAttendanceReport(date);
+            });
+          }); 
+        });
+
+      document.querySelectorAll(".delete-attendances").forEach(button => {
+          button.addEventListener("click", function () {
+              let date = this.getAttribute("data-date");
+
+              Swal.fire({
+                  title: "Are you sure?",
+                  text: `This will permanently delete attendance records for ${date}.`,
+                  icon: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#d33",
+                  cancelButtonColor: "#3085d6",
+                  confirmButtonText: "Yes, delete it!"
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      fetch(`/delete-attendances/${date}`, {
+                          method: "DELETE",
+                          headers: { "Content-Type": "application/json" }
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                          if (data.message) {
+                              Swal.fire("Deleted!", data.message, "success").then(() => {
+                                  location.reload(); // Refresh the page to update the table
+                              });
+                          } else {
+                              Swal.fire("Error!", data.error, "error");
+                          }
+                      })
+                      .catch(() => {
+                          Swal.fire("Error!", "Something went wrong. Please try again.", "error");
+                      });
+                  }
+              });
+          });
+      });
+
+    </script>
+    
+    <script>
+      $(document).ready(function () {
+        $("#attendance-day").DataTable({
+            order: [[0, "desc"]], // Default sorting on the first column
+            paging: true,
+            searching: true,
+            responsive: true // Makes the table responsive
+        });
+      });
+    </script>
+
+  </body>
+</html>

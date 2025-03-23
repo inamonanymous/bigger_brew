@@ -1,5 +1,5 @@
 :root {
-    --yellow: #E2C256;
+    --yellow: #E2C256 !important;
 }
 
 * {
@@ -16,6 +16,23 @@ body {
     align-items: center;     /* Vertically centers the content */
     height: 100vh;
     font-family: 'Inter', sans-serif;
+}
+
+body.modal-open {
+    overflow: hidden;          /* Prevent page scroll */
+    pointer-events: none;      /* Disable background clicks */
+    position: relative;        /* Ensure positioning context for the pseudo-element */
+}
+
+body.modal-open::before {
+    content: '';               /* Necessary for the pseudo-element to show up */
+    position: absolute;        /* Position relative to the body */
+    top: 0;                    /* Cover the entire body */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    z-index: -100;
 }
 
 h1 {
@@ -37,19 +54,27 @@ p {
     font-size: 16px;
     font-weight: 500;
 }
-
+header,
 section {
-    max-width: 1920px;
+    width: 100%;
     position: inherit;
 }
-
+header > div,
 section > div {
+    max-width: 1920px;
     margin: 0 auto;
 }
 
 form {
     display: flex;
     flex-direction: column;
+    gap: 5px 0;
+}
+
+form select {
+    display: block;
+    width: 100%;
+    padding: 25px 0 25px 15px;
 }
 
 form input {
@@ -63,10 +88,14 @@ input::placeholder {
     font-weight: 100;
     font-size: 20px;
 }
-
+.flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 a.btn,
 button {
-    padding: 25px 70px;
+    padding: 15px 40px;
     font-size: 20px;
     background: white;
     border: 0;
@@ -83,12 +112,99 @@ button:hover {
     box-shadow: 0 4px 12px black;
 }
 
+a.btn.action {
+    padding: 5px 10px;
+    font-size: 16px;
+    background: green;
+    color: white;
+}
+
+a.btn.action.btn-danger {
+    padding: 5px 10px;
+    font-size: 16px;
+    background: red;
+    color: white;
+}
+
+a.btn.action.btn-info {
+    padding: 5px 10px;
+    font-size: 16px;
+    background: rgb(0, 200, 255);
+    color: black;
+}
+
 .yellow {
     background: var(--yellow) !important;
 }
 
 .radius {
-    border-radius: 50px;
+    border-radius: 50px !important;
+}
+/* =====
+====================
+====================
+footer
+====================
+====================
+===== */
+#footer {
+    position: fixed;
+    bottom: 0;
+    max-width: unset;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    box-shadow: 4px 4px 4px black;
+}
+/* =====
+====================
+====================
+header
+====================
+====================
+===== */
+
+a.button {
+    text-decoration: unset;
+    color: black;
+    font-weight: bold;
+    background: var(--yellow);
+    padding: 10px 25px;
+    border-radius: 6px;
+}
+#header {
+    position: fixed;
+    top: 0;
+    max-width: unset;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    box-shadow: 4px 4px 4px black;
+}
+
+#header > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    padding: 20px 60px;
+}
+
+#header .img-con {
+    width: 75px;
+    height: auto;
+    overflow:hidden;
+}
+
+#header .img-con img {
+    width: 100%
+}
+
+#header .nav-con {
+    display: flex;
+    gap: 5px;
 }
 
 /* =====
@@ -182,7 +298,6 @@ dashboard
     display: block;
     width: 100%;
     height: 100%;
-    padding-left: 15px;
 }
 
 span.close {
@@ -193,6 +308,7 @@ span.close {
     font-size: 25px;
     font-weight: 900;
     transition: .3s;
+    z-index: 99;
 }
 
 #dashboard div.add-employee input{
@@ -218,7 +334,6 @@ manage-records
 }
 
 #manage-records .header {
-    display: flex;
     gap: 130px;
     margin-bottom: 20px;
     justify-content: center;
@@ -232,23 +347,52 @@ manage-records
     width: fit-content;
     margin: 0 auto;
     padding: 25px;
+    height: 550px;
 }
 
-#manage-records .table-wrapper {
+#manage-records .table-wrapper.inventory {
     width: 650px;
 }
 
-#manage-inventory .table-wrapper {
+#manage-inventory .table-wrapper.inventory {
     width: 1200px;
     max-height: 500px;
+}
+
+#view-attendance-records table a.button {
+    background: white;
+    padding: unset;
+    width: 200px;
+    display: inline-block;
 }
 
 .table-wrapper {
     overflow: scroll;
     padding: 20px 30px; /* Adds padding around the entire table */
     background-color: white; /* Background of the wrapper */
+    position: relative;
+    z-index: 1;
 }
 
+.table-wrapper::before {
+    position: absolute;
+}
+
+.table-wrapper table th,
+.table-wrapper table td{
+    padding: 10px !important;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    gap: 0 30px;
+    background-color: var(--yellow);
+    width: fit-content;
+    margin: 0 auto;
+    padding: 25px;
+    max-height: 700px;
+}
 .table-wrapper table {
     position: relative;
     width: 100%;
@@ -259,14 +403,12 @@ manage-records
 
 
 .table-wrapper table thead {
-    position: sticky;
-    top: 0;
     background-color: var(--yellow);
     z-index: 10; /* Ensure the sticky header stays above the table body */
     padding: 10px 20px;
 }
 
-.table-wrapper table thead::before {
+/* .table-wrapper table thead::before {
     content: '';
     position: absolute;
     padding-top: 10px;
@@ -276,11 +418,12 @@ manage-records
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
+    } */
+    
 .table-wrapper table thead th{
     position: sticky;
     top: 0;
+    text-align: center !important;
     background-color: var(--yellow);
     z-index: 1;
     padding: 20px 40px;
@@ -304,13 +447,14 @@ manage-records
     transform: translate(-50%, -50%);
     background-color: var(--yellow);
     z-index: -1;
-    border-radius: 50px;
+    /* border-radius: 50px; */
 }
 
 .table-wrapper table tbody tr {
     z-index: 1;
     table-layout: fixed; /* Ensure equal column widths */
     width: 100%;
+    cursor: pointer;
 }
 
 .table-wrapper table tbody tr td {
@@ -324,25 +468,18 @@ manage-records
     z-index: 1;
 }
 
-/* =====
-====================
-====================
-manage-inventory
-====================
-====================
-===== */
-#manage-inventory {
-    position: relative;
-}
-#manage-inventory .header.radius {
+section .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: absolute;
-    width: 100%;
-    top: -105px;
+    position: relative;
 }
-#manage-inventory .header.radius::before {
+
+section .header h1 {
+    color: white;
+}
+
+section .header:before {
     content: '';
     position: absolute;
     width: calc(100% + 6px);
@@ -354,16 +491,88 @@ manage-inventory
     z-index: -1;
     border-radius: 10px;
 }
-#manage-inventory .header.radius h1 {
+
+section .header h3 {
     color: white;
-    font-family: 'IBM Plex Mono';
 }
-#manage-inventory .table-wrapper::before {
+
+section .btn-con .nav {
+    position: relative;
+}
+
+
+section .btn-con.nav:before {
     content: '';
     position: absolute;
-    width: calc(100% + 40px);
-    height: calc(100% + 40px);
+    width: calc(100% + 12px);
+    height: calc(100% + 2px);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
+    z-index: -1;
+    border-radius: 50px;
+}
+
+/* =====
+====================
+====================
+manage-item
+====================
+====================
+===== */
+
+#manage-item .body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: unset;
+}
+
+#manage-item .body form {
     background: var(--yellow);
+    padding: 35px 30px 25px;
+    width: 350px;
+}
+#manage-item .body form button {
+    padding: 5px;
+}
+/* =====
+====================
+====================
+manage-inventory
+====================
+====================
+===== */
+#manage-inventory {
+    position: relative;
+}
+#manage-inventory .header.radius {
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px
+}
+#manage-inventory .inventory-modal {
+    display: none;
+    position: absolute;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 15px;
+    z-index: 99999999999999;
+    pointer-events: all;
+    gap: 20px;
+}
+
+#manage-inventory .inventory-modal:before {
+    position: absolute;
+    content: '';
+    background: rgba(0, 0, 0, 0.8);
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -371,15 +580,46 @@ manage-inventory
     z-index: -1;
 }
 
-#manage-inventory .table-wrapper table thead th{
+#manage-inventory .inventory-modal span {
+    cursor: pointer;
+    position: absolute;
+    right: 50px;
+    top: 15px;
+    font-size: 25px;
+    font-weight: 900;
+    transition: .3s;
+}
+
+#manage-inventory .inventory-modal span:hover {
+    transform: translateY(-5px);
+}
+#manage-inventory .inventory-modal form {
+    background: var(--yellow);
+    padding: 35px 30px 25px;
+    width: 350px;
+}
+
+#manage-inventory .inventory-modal form button {
+    margin-top: 15px;
+    padding: 10px 50px;
+    font-weight: 800;
+}
+
+#manage-inventory .header.radius h1 {
+    color: white;
+    font-family: 'IBM Plex Mono';
+}
+
+
+#manage-inventory .table-wrapper.inventory table thead th{
     padding: 15px 0;
     font-size: 25px;
     font-weight: 800px;
 }
-#manage-inventory .table-wrapper table tbody tr td {
+#manage-inventory .table-wrapper.inventory table tbody tr td {
     padding: 5px 0;
 }
-#manage-inventory .table-wrapper table tbody:before {
+#manage-inventory .table-wrapper.inventory table tbody:before {
     content: unset;
 }
 #manage-records tbody tr {
@@ -387,21 +627,21 @@ manage-inventory
     table-layout: fixed;
     z-index: 1;
 }
-#manage-inventory .table-wrapper table tbody td {
+#manage-inventory .table-wrapper.inventory table tbody td {
     position: sticky;
     top: 0;
     background-color: var(--yellow);
     z-index: 1;
     padding: 20px 40px;
 }
-#manage-inventory .table-wrapper table thead th.item-col {
+#manage-inventory .table-wrapper.inventory table thead th.item-col {
     width: 300px;
 }
-#manage-inventory .table-wrapper table thead th:not(.item-col) {
+#manage-inventory .table-wrapper.inventory table thead th:not(.item-col) {
     width: 250px;
 }
 
-#manage-inventory .table-wrapper table tbody .item-col::before {
+#manage-inventory .table-wrapper.inventory table tbody .item-col::before {
     content: '';
     display: inline-block;
     width: 10px; /* Margin size */
@@ -421,40 +661,80 @@ manage-inventory
     font-weight: 800;
 }
 
-#add-item-modal {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 15px;
+/* =====
+====================
+====================
+inventory-log
+====================
+====================
+===== */
+#inventory-log > div {
+    width: fit-content;
 }
 
-#add-item-modal span {
-    cursor: pointer;
-    position: absolute;
-    right: 50px;
-    top: 15px;
-    font-size: 25px;
-    font-weight: 900;
-    transition: .3s;
+#inventory-log .header {
+    margin-bottom: 20px;
+}
+/* =====
+====================
+====================
+manage-category
+====================
+====================
+===== */
+#manage-category .header.radius {
+    margin-bottom: 15px;
 }
 
-#add-item-modal span:hover {
-    transform: translateY(-5px);
-}
-#add-item-modal form {
-    background: var(--yellow);
-    padding: 35px 30px 25px;
-    width: 350px;
-}
-
-#add-item-modal form button {
-    margin-top: 15px;
-    padding: 10px 50px;
+#manage-category .btn-con a.btn {
+    padding: 10px 20px;
+    font-size: 20px;
     font-weight: 800;
 }
+#manage-category .btn-con.back {
+    margin-top: 30px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
+}
+/* =====
+====================
+====================
+view-records
+====================
+====================
+===== */
+#view-records .header.radius {
+    margin-bottom: 15px;
+}
+
+#view-recordsa .btn-con.back {
+    margin-top: 30px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
+}
+
+/* =====
+====================
+====================
+inventory-log
+====================
+====================
+===== */
+#inventory-log .btn-con.back {
+    margin-top: 30px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.3));
+}
+
 /* =====
 ====================
 ====================
@@ -491,7 +771,8 @@ attendance-records-without-checkout
 ====================
 ===== */
 
-#attendance-rercords-without-checkout > div {
+#attendance-rercords-without-checkout > div,
+#attendance-records-with-checkout > div {
     background: rgba(255, 255, 255, 0.5);
     padding: 50px;
     display: flex;
@@ -499,10 +780,13 @@ attendance-records-without-checkout
     gap: 30px;
 }
 
-#attendance-rercords-without-checkout .btn-con {
+#attendance-rercords-without-checkout .btn-con,
+#attendance-records-with-checkout .btn-con {
     display: flex;
     justify-content: space-between;
 }
+
+
 /* =====
 ====================
 ====================
@@ -514,4 +798,8 @@ error
 #error > div {
     background: rgba(255, 255, 255, 0.7);
     padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
 }

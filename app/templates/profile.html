@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Profile</title>
+        <meta
+          content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+          name="viewport"
+        />
+        <link
+          rel="icon"
+          href="../static/assets/img/kaiadmin/favicon.ico') }}"
+          type="image/x-icon"
+        />
+    
+        <!-- Fonts and icons -->
+        <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+        <script>
+          WebFont.load({
+            google: { families: ["Public Sans:300,400,500,600,700"] },
+            custom: {
+              families: [
+                "Font Awesome 5 Solid",
+                "Font Awesome 5 Regular",
+                "Font Awesome 5 Brands",
+                "simple-line-icons",
+              ],
+              urls: ["../static/assets/css/fonts.min.css"],
+            },
+            active: function () {
+              sessionStorage.fonts = true;
+            },
+          });
+        </script>
+    
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+        <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+    
+      </head>
+    <body>
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <div class="sidebar" data-background-color="dark">
+                <div class="sidebar-logo">
+                <!-- Logo Header -->
+                <div class="logo-header" data-background-color="red">
+                    <a href="/dashboard" class="logo">
+                        Sip N' Takoyaki
+                    </a>
+                    <div class="nav-toggle">
+                      <button class="btn btn-toggle toggle-sidebar">
+                        <i class="gg-menu-right"></i>
+                      </button>
+                      <button class="btn btn-toggle sidenav-toggler">
+                        <i class="gg-menu-left"></i>
+                      </button>
+                    </div>
+                    <button class="topbar-toggler more">
+                      <i class="gg-more-vertical-alt"></i>
+                    </button>
+                  </div>
+                <!-- End Logo Header -->
+                </div>
+                <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                <div class="sidebar-content">
+                    <ul class="nav nav-secondary">
+                    <li class="nav-item">
+                        <a
+                        data-bs-toggle="collapse"
+                        href="#dashboard"
+                        class="collapsed"
+                        aria-expanded="false"
+                        >
+                        <i class="fas fa-home"></i>
+                        <p>Dashboard</p>
+                        <span class="caret"></span>
+                        </a>
+                        <div class="collapse" id="dashboard">
+                        <ul class="nav nav-collapse">
+                            <li>
+                            <a href="/dashboard">
+                                <span class="sub-item">Dashboard</span>
+                            </a>
+                            </li>
+                        </ul>
+                        </div>
+                    </li>
+
+                    {% if current_user.role =="Admin" %}
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#manage-records">
+                            <i class="fas fa-table"></i>
+                            <p>Manage Records</p>
+                            <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="manage-records">
+                            <ul class="nav nav-collapse">
+                                <li class="active">
+                                <a href="/manage-employees">
+                                    <span class="sub-item">Manage Employees</span>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="/manage-attendance">
+                                    <span class="sub-item">Manage Attendance</span>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="/qr-code-scanner">
+                                    <span class="sub-item">QR Code Scanner</span>
+                                </a>
+                                </li>
+                            </ul>
+                            </div>
+                        </li>
+                    {% endif %}
+                    {% if current_user.role =="Employee" %}
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a data-bs-toggle="collapse" href="#inventory">
+                        <i class="fas fa-table"></i>
+                        <p>Manage Inventory</p>
+                        <span class="caret"></span>
+                        </a>
+                        <div class="collapse" id="inventory">
+                        <ul class="nav nav-collapse">
+                            <li>
+                            <a href="/manage-inventory">
+                                <span class="sub-item">Inventory</span>
+                            </a>
+                            </li>
+                            <li >
+                            <a href="/manage-categories">
+                                <span class="sub-item">Categories</span>
+                            </a>
+                            </li>
+                            <li>
+                            <a href="/manage-inventory-log">
+                                <span class="sub-item">Logs</span>
+                            </a>
+                            </li>
+                        </ul>
+                        </div>
+                    </li>
+                    
+                    </ul>
+                </div>
+                </div>
+            </div>
+            <!-- End Sidebar -->
+            <div class="main-panel">
+                <div class="main-header">
+                    <div class="main-header-logo">
+                      <!-- Logo Header -->
+                      <div class="logo-header" data-background-color="dark">
+                        <a href="/" class="logo">
+                          <img
+                            src="../static/assets/img/kaiadmin/logo_light.svg"
+                            alt="navbar brand"
+                            class="navbar-brand"
+                            height="20"
+                          />
+                        </a>
+                        <div class="nav-toggle">
+                          <button class="btn btn-toggle toggle-sidebar">
+                            <i class="gg-menu-right"></i>
+                          </button>
+                          <button class="btn btn-toggle sidenav-toggler">
+                            <i class="gg-menu-left"></i>
+                          </button>
+                        </div>
+                        <button class="topbar-toggler more">
+                          <i class="gg-more-vertical-alt"></i>
+                        </button>
+                      </div>
+                      <!-- End Logo Header -->
+                    </div>
+                    <!-- Navbar Header -->
+                    <nav
+                      class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+                    >
+                      <div class="container-fluid">
+                        <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                          <li class="nav-item topbar-user dropdown hidden-caret">
+                            <a
+                              class="dropdown-toggle profile-pic"
+                              data-bs-toggle="dropdown"
+                              href="#"
+                              aria-expanded="false"
+                            >
+                              <div class="avatar-sm">
+                                <img
+                                  src="../static/assets/img/profile.jpg"
+                                  alt="..."
+                                  class="avatar-img rounded-circle"
+                                />
+                              </div>
+                              <span class="profile-username">
+                                <span class="op-7">Hi,</span>
+                                <span class="fw-bold text-capitalize">{{ current_user.firstname }}</span>
+                              </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user animated fadeIn">
+                              <div class="dropdown-user-scroll scrollbar-outer">
+                                <li>
+                                  <div class="user-box">
+                                    <div class="avatar-lg">
+                                      <img
+                                        src="../static/assets/img/profile.jpg"
+                                        alt="image profile"
+                                        class="avatar-img rounded"
+                                      />
+                                    </div>
+                                    <div class="u-text">
+                                      <h4>{{ current_user.firstname }}</h4>
+                                      <p class="text-muted">{{ current_user.username }}</p>
+                                      <a
+                                        href="/profile"
+                                        class="btn btn-xs btn-secondary btn-sm"
+                                        >View Profile</a
+                                      >
+                                    </div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <div class="dropdown-divider"></div>
+          
+                                  <a class="dropdown-item" href="/logout">Logout</a>
+                                </li>
+                              </div>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </nav>
+                    <!-- End Navbar -->
+                  </div>
+
+                  <div class="container">
+                    <div class="page-inner">
+                      <div class="row">
+                        <div class="profile-information">
+                            <h2>User Profile</h2>
+                            <div class="profile-details">
+                                <p><strong>Username:</strong> {{ current_user.username }}</p>
+                                <p><strong>Email:</strong> {{ current_user.email }}</p>
+                                <p><strong>Full Name:</strong> {{ current_user.firstname }} {{ current_user.middlename or '' }} {{ current_user.lastname }} {{ current_user.suffix or '' }}</p>
+                                <p><strong>Role:</strong> {{ current_user.role }}</p>
+                                <p><strong>Created At:</strong> {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+                            </div>
+                
+                            {% if current_user.role=="Employee" %}
+                                <h3>Attendance Summary</h3>
+                                <div class="attendance-summary">
+                                    <p><strong>Total Hours:</strong> {{ attendance_summary.total_hours }}</p>
+                                    <p><strong>Attendance Days:</strong> {{ attendance_summary.attendance_days }}</p>
+                                    <p><strong>Earliest Check-in:</strong> {{ attendance_summary.earliest_check_in.strftime('%I:%M %p') if attendance_summary.earliest_check_in else 'N/A' }}</p>
+                                    <p><strong>Latest Check-out:</strong> {{ attendance_summary.latest_check_out.strftime('%I:%M %p') if attendance_summary.latest_check_out else 'N/A' }}</p>
+
+                                </div>
+                                <h3>QR Code</h3>
+                                {% if user.qr_code_path %}
+                                <a href="{{ url_for('static', filename=user.qr_code_path.split('static/')[1].replace('\\', '/')) }}" target="_blank">
+                                    <img src="{{ url_for('static', filename=user.qr_code_path.split('static/')[1].replace('\\', '/')) }}" alt="QR Code" width="100" height="100">
+                                </a>
+                                {% else %}
+                                <p>No QR Code Available</p>
+                                {% endif %}
+                            {% endif %}
+                            <button id="editProfileBtn" class="btn btn-success">
+                                Edit Profile
+                            </button>
+                            <button onclick="changePassword()" class="btn btn-danger">Change Password</button>
+                        </div>
+                        
+                      </div>
+                        
+          
+          
+                      </div>
+                  </div>
+          
+                  <footer class="footer">
+                    <div class="container-fluid d-flex justify-content-between">
+                      <nav class="pull-left">
+                        <ul class="nav">
+                          <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Sip N' Takoyaki
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="#"> Help </a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="#"> Licenses </a>
+                          </li>
+                        </ul>
+                      </nav>
+                      <div class="copyright">
+                        2025
+                      </div>
+                      <div>
+                        Distributed by
+                        <a href="#">Lunzaga, Mallari, Masongsong</a>.
+                      </div>
+                    </div>
+                  </footer>
+            </div>
+
+    
+            <a href="{{ url_for('main.dashboard') }}" class="back-button">Back to Dashboard</a>
+            </div>
+        </div>
+
+
+        <!-- Custom javascript for project! -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="../static/js/script.js"></script>
+
+        <!--   Core JS Files   -->
+        <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+        <script src="../static/assets/js/core/popper.min.js"></script>
+        <script src="../static/assets/js/core/bootstrap.min.js"></script>
+
+        <!-- jQuery Scrollbar -->
+        <script src="../static/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+
+        <!-- Chart JS -->
+        <script src="../static/assets/js/plugin/chart.js/chart.min.js"></script>
+
+        <!-- jQuery Sparkline -->
+        <script src="../static/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+
+        <!-- Chart Circle -->
+        <script src="../static/assets/js/plugin/chart-circle/circles.min.js"></script>
+
+        <!-- Datatables -->
+        <script src="../static/assets/js/plugin/datatables/datatables.min.js"></script>
+
+        <!-- Bootstrap Notify -->
+        <script src="../static/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+
+        <!-- jQuery Vector Maps -->
+        <script src="../static/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+        <script src="../static/assets/js/plugin/jsvectormap/world.js"></script>
+
+        <!-- Sweet Alert -->
+        <script src="../static/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+        <!-- Kaiadmin JS -->
+        <script src="../static/assets/js/kaiadmin.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("editProfileBtn").addEventListener("click", function () {
+                    Swal.fire({
+                        title: "Edit Profile",
+                        html: `
+                            <input id="swal-firstname" class="swal2-input" placeholder="First Name" value="{{ current_user.firstname }}">
+                            <input id="swal-middlename" class="swal2-input" placeholder="Middle Name" value="{{ current_user.middlename or '' }}">
+                            <input id="swal-lastname" class="swal2-input" placeholder="Last Name" value="{{ current_user.lastname }}">
+                            <input id="swal-suffix" class="swal2-input" placeholder="Suffix" value="{{ current_user.suffix or '' }}">
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: "Save Changes",
+                        preConfirm: () => {
+                            return {
+                                firstname: document.getElementById("swal-firstname").value,
+                                middlename: document.getElementById("swal-middlename").value,
+                                lastname: document.getElementById("swal-lastname").value,
+                                suffix: document.getElementById("swal-suffix").value
+                            };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch("/api/edit-current-user", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(result.value)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire("Success", data.message, "success").then(() => {
+                                        location.reload(); // Refresh the page to show updated data
+                                    });
+                                } else {
+                                    Swal.fire("Error", data.message, "error");
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                Swal.fire("Error", "Something went wrong. Try again.", "error");
+                            });
+                        }
+                    });
+                });
+            });
+            function changePassword() {
+                Swal.fire({
+                    title: "Change Password",
+                    html: `
+                        <input type="password" id="swal-old-password" class="swal2-input" placeholder="Current Password">
+                        <input type="password" id="swal-new-password" class="swal2-input" placeholder="New Password">
+                        <input type="password" id="swal-confirm-password" class="swal2-input" placeholder="Confirm New Password">
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: "Change Password",
+                    preConfirm: () => {
+                        const oldPassword = document.getElementById("swal-old-password").value;
+                        const newPassword = document.getElementById("swal-new-password").value;
+                        const confirmPassword = document.getElementById("swal-confirm-password").value;
+
+                        if (!oldPassword || !newPassword || !confirmPassword) {
+                            Swal.showValidationMessage("All fields are required!");
+                            return false;
+                        }
+
+                        if (newPassword.length < 6) {
+                            Swal.showValidationMessage("New password must be at least 6 characters long.");
+                            return false;
+                        }
+
+                        if (newPassword !== confirmPassword) {
+                            Swal.showValidationMessage("New passwords do not match.");
+                            return false;
+                        }
+
+                        return { old_password: oldPassword, new_password: newPassword };
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch("/change-password", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(result.value)
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message.includes("success")) {
+                                Swal.fire("Success", data.message, "success")
+                                    .then(() => location.reload());
+                            } else {
+                                Swal.fire("Error", data.message, "error");
+                            }
+                        })
+                        .catch(() => {
+                            Swal.fire("Error", "Something went wrong. Please try again.", "error");
+                        });
+                    }
+                });
+            }
+
+        </script>
+    </body>
+</html>
