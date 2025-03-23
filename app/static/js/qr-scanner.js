@@ -16,10 +16,32 @@ document.addEventListener('DOMContentLoaded', () => {
             // When a QR code is scanned
             scanner.addListener('scan', (content) => {
                 console.log('Scanned QR Code:', content);
-                alert(`Scanned QR Code: ${content}`);
-                let data = JSON.parse(content);
+
+                let data;
+                try {
+                    data = JSON.parse(content);
+                } catch (error) {
+                    console.error('Invalid QR Code format:', error);
+                    return Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid QR Code!',
+                        text: 'The scanned code is not in a valid format.',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }
+
                 console.log('Type of scanned data:', typeof content);
                 console.log('Type of parsed data:', typeof data);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'QR Code Scanned!',
+                    text: `Data: ${content}`,
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
                 sendQRCodeToAPI(data);
             });
 
@@ -29,18 +51,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (cameras.length > 0) {
                         scanner.start(cameras[0]); // Use the first camera
                     } else {
-                        alert('No cameras found.');
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'No cameras found!',
+                            text: 'Please connect a camera and try again.'
+                        });
                     }
                 })
                 .catch((error) => {
                     console.error('Error getting cameras:', error);
-                    alert('Error accessing camera devices.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Camera Error!',
+                        text: 'Error accessing camera devices.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
                 });
 
         })
         .catch((error) => {
             console.error('Error accessing the camera:', error.name, error.message);
-            alert(`Camera error: ${error.name} - ${error.message}`);
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Camera Access Denied!',
+                text: `Error: ${error.name} - ${error.message}`,
+                timer: 2000,
+                showConfirmButton: false
+            });
 
             // Replace video with a fallback image if camera access fails
             const image = document.createElement('img');
@@ -51,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             video.replaceWith(image);
         });
 });
+
 function sendQRCodeToAPI(qrData) {
     fetch('/api/generate_qr_code-code', {
         method: 'POST',
@@ -59,13 +99,32 @@ function sendQRCodeToAPI(qrData) {
         },
         body: JSON.stringify({ qr_code: qrData }) // Send QR data as JSON
     })
-    .then(response => response.json()) // Convert response to JSON
+    .then(response => {
+        if (!response.ok) {
+            // If response status is not 2xx, throw an error
+            return response.json().then(err => { throw new Error(err.message || "Failed to process request"); });
+        }
+        return response.json();
+    })
     .then(data => {
         console.log('Server Response:', data);
-        alert(data.message); // Show success or error message
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: data.message,
+            timer: 1500,
+            showConfirmButton: false
+        });
     })
     .catch(error => {
         console.error('Error sending QR Code:', error);
-        alert('Failed to send QR code to the server.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Failed to Send!',
+            text: error.message || 'Failed to send QR code to the server.',
+            timer: 1500,
+            showConfirmButton: false
+        });
     });
 }
+

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Manage Employees</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="../static/assets/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../static/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <div class="sidebar" data-background-color="dark">
+        <div class="sidebar-logo">
+          <!-- Logo Header -->
+          <div class="logo-header" data-background-color="red">
+            <a href="/dashboard" class="logo">
+              Sip N' Takoyaki
+            </a>
+            <div class="nav-toggle">
+              <button class="btn btn-toggle toggle-sidebar">
+                <i class="gg-menu-right"></i>
+              </button>
+              <button class="btn btn-toggle sidenav-toggler">
+                <i class="gg-menu-left"></i>
+              </button>
+            </div>
+            <button class="topbar-toggler more">
+              <i class="gg-more-vertical-alt"></i>
+            </button>
+          </div>
+          <!-- End Logo Header -->
+        </div>
+        <div class="sidebar-wrapper scrollbar scrollbar-inner">
+          <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+              <li class="nav-item">
+                <a
+                  data-bs-toggle="collapse"
+                  href="#dashboard"
+                  class="collapsed"
+                  aria-expanded="false"
+                >
+                  <i class="fas fa-home"></i>
+                  <p>Dashboard</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="dashboard">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="/dashboard">
+                        <span class="sub-item">Dashboard</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+          
+              
+              <li class="nav-item active submenu">
+                <a data-bs-toggle="collapse" href="#records">
+                  <i class="fas fa-table"></i>
+                  <p>Manage Records</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse show" id="records">
+                  <ul class="nav nav-collapse">
+                    <li class="active">
+                      <a href="/manage-employees">
+                        <span class="sub-item">Manage Employees</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/manage-attendance">
+                        <span class="sub-item">Manage Attendance</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/qr-code-scanner">
+                        <span class="sub-item">QR Code Scanner</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              
+              
+              <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#inventory">
+                  <i class="fas fa-table"></i>
+                  <p>Manage Inventory</p>
+                  <span class="caret"></span>
+                </a>
+                <div class="collapse" id="inventory">
+                  <ul class="nav nav-collapse">
+                    <li>
+                      <a href="/manage-inventory">
+                        <span class="sub-item">Inventory</span>
+                      </a>
+                    </li>
+                    <li >
+                      <a href="/manage-categories">
+                        <span class="sub-item">Categories</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/manage-inventory-log">
+                        <span class="sub-item">Logs</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- End Sidebar -->
+
+      <div class="main-panel">
+        <div class="main-header">
+          <div class="main-header-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+              <a href="/" class="logo">
+                <img
+                  src="../static/assets/img/kaiadmin/logo_light.svg"
+                  alt="navbar brand"
+                  class="navbar-brand"
+                  height="20"
+                />
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <!-- Navbar Header -->
+          <nav
+            class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+          >
+            <div class="container-fluid">
+              <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <li class="nav-item topbar-user dropdown hidden-caret">
+                  <a
+                    class="dropdown-toggle profile-pic"
+                    data-bs-toggle="dropdown"
+                    href="#"
+                    aria-expanded="false"
+                  >
+                    <div class="avatar-sm">
+                      <img
+                        src="../static/assets/img/profile.jpg"
+                        alt="..."
+                        class="avatar-img rounded-circle"
+                      />
+                    </div>
+                    <span class="profile-username">
+                      <span class="op-7">Hi,</span>
+                      <span class="fw-bold text-capitalize">{{ current_user.firstname }}</span>
+                    </span>
+                  </a>
+                  <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                      <li>
+                        <div class="user-box">
+                          <div class="avatar-lg">
+                            <img
+                              src="../static/assets/img/profile.jpg"
+                              alt="image profile"
+                              class="avatar-img rounded"
+                            />
+                          </div>
+                          <div class="u-text">
+                            <h4>{{ current_user.firstname }}</h4>
+                            <p class="text-muted">{{ current_user.username }}</p>
+                            <a
+                              href="/profile"
+                              class="btn btn-xs btn-secondary btn-sm"
+                              >View Profile</a
+                            >
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                      </li>
+                    </div>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+        </div>
+
+        <div class="container">
+          <div class="page-inner">
+            <div class="page-header">
+              <h3 class="fw-bold mb-3">Manage Records</h3>
+              <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                  <a href="#">
+                    <i class="icon-home"></i>
+                  </a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Manage Records</a>
+                </li>
+                <li class="separator">
+                  <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                  <a href="#">Manage employees</a>
+                </li>
+              </ul>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="card-title">Basic</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table id="manage-employees" class="display table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Start date</th>
+                            <th>QR Code</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for user in users %}
+                          <tr data-id="{{ user.user_id }}">
+                            <td>
+                              {{ user.lastname }}, {{ user.firstname }} {{ user.middlename or '' }}
+                            </td>
+                            <td>{{ user.role }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.email }}</td>
+                            <td class="format-date">{{ user.created_at }}</td>
+                            <td>
+                              <a href="{{ url_for('static', filename=user.qr_code_path.split('static/')[1].replace('\\', '/')) }}" target="_blank">
+                                <img src="{{ url_for('static', filename=user.qr_code_path.split('static/')[1].replace('\\', '/')) }}" alt="QR Code" width="100" height="100">
+                              </a>
+                            </td>
+                            <td>
+                              <button class="btn btn-sm btn-primary edit-user">Edit</button>
+                              <button class="btn btn-sm btn-danger delete-user">Delete</button>
+                            </td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="container-fluid d-flex justify-content-between">
+            <nav class="pull-left">
+              <ul class="nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    Sip N' Takoyaki
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Help </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"> Licenses </a>
+                </li>
+              </ul>
+            </nav>
+            <div class="copyright">
+              2025
+            </div>
+            <div>
+              Distributed by
+              <a href="#">Lunzaga, Mallari, Masongsong</a>.
+            </div>
+          </div>
+        </footer>
+      </div>
+
+      <!-- End Custom template -->
+    </div>
+    <!--   Core JS Files   -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../static/js/script.js"></script>
+    <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+    <script src="../static/assets/js/core/popper.min.js"></script>
+    <script src="../static/assets/js/core/bootstrap.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="../static/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <!-- Datatables -->
+    <script src="../static/assets/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Kaiadmin JS -->
+    <script src="../static/assets/js/kaiadmin.min.js"></script>
+    <!-- Kaiadmin DEMO methods, don't include it in your project! -->
+    <script src="../static/assets/js/setting-demo2.js"></script>
+    <script>
+        $(document).ready(function () {
+          // Initialize DataTable
+          $("#manage-employees").DataTable();
+
+          // Handle Edit button click
+          $('#manage-employees tbody').on('click', '.edit-user', function () {
+              var row = $(this).closest('tr');
+              var userId = row.data('id'); // Get user ID
+
+              fetch(`/manage-user/${userId}`)
+                  .then(response => response.json())
+                  .then(user => {
+                      Swal.fire({
+                          title: `Edit Employee: ${user.lastname}, ${user.firstname} ${user.middlename || ''}`,
+                          html: `
+                              <input type="text" id="lastname" class="swal2-input" value="${user.lastname}">
+                              <input type="text" id="firstname" class="swal2-input" value="${user.firstname}">
+                              <input type="text" id="middlename" class="swal2-input" value="${user.middlename || ''}">
+                          `,
+                          showCancelButton: true,
+                          confirmButtonText: 'Update',
+                          cancelButtonText: 'Close',
+                          showDenyButton: true,
+                          denyButtonText: 'Delete',
+                          preConfirm: () => {
+                              return {
+                                  lastname: document.getElementById('lastname').value,
+                                  firstname: document.getElementById('firstname').value,
+                                  middlename: document.getElementById('middlename').value
+                              };
+                          }
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              fetch(`/manage-user/${userId}`, {
+                                  method: 'PUT',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify(result.value)
+                              })
+                              .then(response => response.json())
+                              .then(data => {
+                                  Swal.fire('Updated!', data.message, 'success').then(() => location.reload());
+                              })
+                              .catch(() => {
+                                  Swal.fire('Failed', 'Failed to update employee.', 'error');
+                              });
+
+                          } else if (result.isDenied) {
+                              Swal.fire({
+                                  title: 'Are you sure?',
+                                  text: 'This will permanently delete the employee!',
+                                  icon: 'warning',
+                                  showCancelButton: true,
+                                  confirmButtonText: 'Yes, delete it!',
+                                  cancelButtonText: 'Cancel'
+                              }).then((deleteResult) => {
+                                  if (deleteResult.isConfirmed) {
+                                      fetch(`/manage-user/${userId}`, { method: 'DELETE' })
+                                      .then(response => response.json())
+                                      .then(data => {
+                                          Swal.fire('Deleted!', data.message, 'success').then(() => location.reload());
+                                      })
+                                      .catch(() => {
+                                          Swal.fire('Failed', 'Failed to delete employee.', 'error');
+                                      });
+                                  }
+                              });
+                          }
+                      });
+                  })
+                  .catch(() => {
+                      Swal.fire('Failed', 'Failed to fetch employee details.', 'error');
+                  });
+          });
+
+          // Handle Delete button click
+          $('#manage-employees tbody').on('click', '.delete-user', function () {
+              var row = $(this).closest('tr');
+              var userId = row.data('id');
+
+              Swal.fire({
+                  title: 'Are you sure?',
+                  text: 'This will permanently delete the employee!',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Yes, delete it!',
+                  cancelButtonText: 'Cancel'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      fetch(`/manage-user/${userId}`, { method: 'DELETE' })
+                      .then(response => response.json())
+                      .then(data => {
+                          Swal.fire('Deleted!', data.message, 'success').then(() => location.reload());
+                      })
+                      .catch(() => {
+                          Swal.fire('Failed', 'Failed to delete employee.', 'error');
+                      });
+                  }
+              });
+          });
+      });
+
+    </script>
+    
+  </body>
+</html>

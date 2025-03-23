@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Inventory</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    <link
+      rel="icon"
+      href="../static/assets/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    />
+
+    <!-- Fonts and icons -->
+    <script src="../static/assets/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["../static/assets/css/fonts.min.css"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="../static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/plugins.min.css" />
+    <link rel="stylesheet" href="../static/assets/css/kaiadmin.min.css" />
+    <script src="https://unpkg.com/sweetalert2@11"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar" data-background-color="dark">
+          <div class="sidebar-logo">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="red">
+              <a href="/dashboard" class="logo">
+                Sip N' Takoyaki
+              </a>
+              <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                  <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                  <i class="gg-menu-left"></i>
+                </button>
+              </div>
+              <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+              </button>
+            </div>
+            <!-- End Logo Header -->
+          </div>
+          <div class="sidebar-wrapper scrollbar scrollbar-inner">
+            <div class="sidebar-content">
+              <ul class="nav nav-secondary">
+                <li class="nav-item">
+                  <a
+                    data-bs-toggle="collapse"
+                    href="#dashboard"
+                    class="collapsed"
+                    aria-expanded="false"
+                  >
+                    <i class="fas fa-home"></i>
+                    <p>Dashboard</p>
+                    <span class="caret"></span>
+                  </a>
+                  <div class="collapse" id="dashboard">
+                    <ul class="nav nav-collapse">
+                      <li>
+                        <a href="/dashboard">
+                          <span class="sub-item">Dashboard</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+            
+                <li class="nav-item">
+                  <a data-bs-toggle="collapse" href="#manage-records">
+                    <i class="fas fa-table"></i>
+                    <p>Manage Records</p>
+                    <span class="caret"></span>
+                  </a>
+                  <div class="collapse" id="manage-records">
+                    <ul class="nav nav-collapse">
+                      <li>
+                        <a href="/manage-attendance">
+                          <span class="sub-item">Manage Attendance</span>
+                        </a>
+                      </li>
+                      {% if current_user.role =="Admin" %}
+                        <li>
+                          <a href="/manage-employees">
+                            <span class="sub-item">Manage Employees</span>
+                          </a>
+                        </li>
+                        <li>
+                            <a href="/qr-code-scanner">
+                            <span class="sub-item">QR Code Scanner</span>
+                            </a>
+                          </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                  </li>
+                {% if current_user.role =="Employee" %}
+                {% endif %}
+
+                <li class="nav-item active submenu">
+                  <a data-bs-toggle="collapse" href="#inventory">
+                    <i class="fas fa-table"></i>
+                    <p>Manage Inventory</p>
+                    <span class="caret"></span>
+                  </a>
+                  <div class="collapse show" id="inventory">
+                    <ul class="nav nav-collapse">
+                      <li class="active" > 
+                        <a href="/manage-inventory">
+                          <span class="sub-item">Inventory</span>
+                        </a>
+                      </li>
+                      <li >
+                        <a href="/manage-categories">
+                          <span class="sub-item">Categories</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="/manage-inventory-log">
+                          <span class="sub-item">Logs</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- End Sidebar -->
+  
+        <div class="main-panel">
+          <div class="main-header">
+            <div class="main-header-logo">
+              <!-- Logo Header -->
+              <div class="logo-header" data-background-color="dark">
+                <a href="/" class="logo">
+                  <img
+                    src="../static/assets/img/kaiadmin/logo_light.svg"
+                    alt="navbar brand"
+                    class="navbar-brand"
+                    height="20"
+                  />
+                </a>
+                <div class="nav-toggle">
+                  <button class="btn btn-toggle toggle-sidebar">
+                    <i class="gg-menu-right"></i>
+                  </button>
+                  <button class="btn btn-toggle sidenav-toggler">
+                    <i class="gg-menu-left"></i>
+                  </button>
+                </div>
+                <button class="topbar-toggler more">
+                  <i class="gg-more-vertical-alt"></i>
+                </button>
+              </div>
+              <!-- End Logo Header -->
+            </div>
+            <!-- Navbar Header -->
+            <nav
+              class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom"
+            >
+              <div class="container-fluid">
+                <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                  <li class="nav-item topbar-user dropdown hidden-caret">
+                    <a
+                      class="dropdown-toggle profile-pic"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      aria-expanded="false"
+                    >
+                      <div class="avatar-sm">
+                        <img
+                          src="../static/assets/img/profile.jpg"
+                          alt="..."
+                          class="avatar-img rounded-circle"
+                        />
+                      </div>
+                      <span class="profile-username">
+                        <span class="op-7">Hi,</span>
+                        <span class="fw-bold text-capitalize">{{ current_user.firstname }}</span>
+                      </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user animated fadeIn">
+                      <div class="dropdown-user-scroll scrollbar-outer">
+                        <li>
+                          <div class="user-box">
+                            <div class="avatar-lg">
+                              <img
+                                src="../static/assets/img/profile.jpg"
+                                alt="image profile"
+                                class="avatar-img rounded"
+                              />
+                            </div>
+                            <div class="u-text">
+                              <h4>{{ current_user.firstname }}</h4>
+                              <p class="text-muted">{{ current_user.username }}</p>
+                              <a
+                                href="/profile"
+                                class="btn btn-xs btn-secondary btn-sm"
+                                >View Profile</a
+                              >
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="dropdown-divider"></div>
+  
+                          <a class="dropdown-item" href="/logout">Logout</a>
+                        </li>
+                      </div>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+            <!-- End Navbar -->
+          </div>
+  
+          <div class="container">
+            <div class="page-inner">
+                <div class="page-header">
+                    <h3 class="fw-bold mb-3">Manage Inventory</h3>
+                    <ul class="breadcrumbs mb-3">
+                        <li class="nav-home">
+                        <a href="#">
+                            <i class="icon-home"></i>
+                        </a>
+                        </li>
+                        <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item">
+                        <a href="#">Manage Inventory</a>
+                        </li>
+                        <li class="separator">
+                        <i class="icon-arrow-right"></i>
+                        </li>
+                        <li class="nav-item">
+                        <a href="#">Inventory</a>
+                        </li>
+                    </ul>
+                </div>
+
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h4 class="card-title">Inventory</h4>
+                  </div>
+                  <a class="btn-primary btn radius" id="openAddItem">Add Item</a>
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table
+                        id="manage-inventory-table"
+                        class="display table table-striped table-hover"
+                      >
+                        <thead>
+                          <tr>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Unit of Measurement</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tfoot>
+                          <tr>
+                            <th>Item</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Unit of Measurement</th>
+                            <th>Action</th>
+                          </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for item, category_name in all_items_with_categories %}
+                                <tr>
+                                    <td>{{ item.item_name }}</td>
+                                    <td>{{ item.item_description }}</td>
+                                    <td>{{ category_name }}</td>
+                                    <td>₱: {{ item.item_price }}</td>
+                                    <td>{{ item.item_stock }}</td>
+                                    <td>{{ item.item_measurement }}</td>
+                                    <td>
+                                        <a href="#" data-value="{{ item.item_id }}" class="btn action btn-warning radius edit-quantity">Edit Quantity</a>
+                                        <a href="#" data-value="{{ item.item_id }}" class="btn action btn-info radius edit-item">Edit Item</a>
+                                        <a href="#" data-value="{{ item.item_id }}" class="btn action btn-danger radius delete-item">Delete Item</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+            </div>
+          </div>
+  
+          <footer class="footer">
+            <div class="container-fluid d-flex justify-content-between">
+              <nav class="pull-left">
+                <ul class="nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">
+                      Sip N' Takoyaki
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"> Help </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#"> Licenses </a>
+                  </li>
+                </ul>
+              </nav>
+              <div class="copyright">
+                2025
+              </div>
+              <div>
+                Distributed by
+                <a target="_blank" href="#">Lunzaga, Mallari, Masongsong</a>.
+              </div>
+            </div>
+          </footer>
+        </div>
+  
+        <!-- End Custom template -->
+      </div>
+
+     <!--   Core JS Files   -->
+     <script src="../static/assets/js/core/jquery-3.7.1.min.js"></script>
+     <script src="../static/assets/js/core/popper.min.js"></script>
+     <script src="../static/assets/js/core/bootstrap.min.js"></script>
+ 
+     <!-- jQuery Scrollbar -->
+     <script src="../static/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+ 
+     <!-- Chart JS -->
+     <script src="../static/assets/js/plugin/chart.js/chart.min.js"></script>
+ 
+     <!-- jQuery Sparkline -->
+     <script src="../static/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+ 
+     <!-- Chart Circle -->
+     <script src="../static/assets/js/plugin/chart-circle/circles.min.js"></script>
+ 
+     <!-- Datatables -->
+     <script src="../static/assets/js/plugin/datatables/datatables.min.js"></script>
+ 
+     <!-- Bootstrap Notify -->
+     <script src="../static/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+ 
+     <!-- jQuery Vector Maps -->
+     <script src="../static/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+     <script src="../static/assets/js/plugin/jsvectormap/world.js"></script>
+ 
+     <!-- Sweet Alert -->
+     <script src="../static/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+ 
+     <!-- Kaiadmin JS -->
+     <script src="../static/assets/js/kaiadmin.min.js"></script>
+
+     <script>
+        $(document).ready(function () {
+          $("#manage-inventory-table").DataTable({
+            pageLength: 5,
+            initComplete: function () {
+              this.api()
+                .columns()
+                .every(function () {
+                  var column = this;
+                  var headerText = $(column.header()).text().trim(); // Get column header text
+
+                      // Create dropdown select
+                    var select = $('<select class="form-select"><option value="">All ' + headerText + '</option></select>')
+                    .appendTo($(column.footer()).empty())
+                    .on("change", function () {
+                      var val = $.fn.dataTable.util.escapeRegex($(this).val());
+  
+                      column
+                        .search(val ? "^" + val + "$" : "", true, false)
+                        .draw();
+                    });
+  
+                  column
+                    .data()
+                    .unique()
+                    .sort()
+                    .each(function (d, j) {
+                      select.append(
+                        '<option value="' + d + '">' + d + "</option>"
+                      );
+                    });
+                });
+            },
+          });
+  
+          // Add Row
+          $("#add-row").DataTable({
+            pageLength: 5,
+          });
+  
+          var action =
+            '<td> <div class="form-button-action"> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+  
+          $("#addRowButton").click(function () {
+            $("#add-row")
+              .dataTable()
+              .fnAddData([
+                $("#addName").val(),
+                $("#addPosition").val(),
+                $("#addOffice").val(),
+                action,
+              ]);
+            $("#addRowModal").modal("hide");
+          });
+        });
+      </script>
+      <script>
+          var categoryOptions = `{% for cat in all_categories %}<option value="{{ cat.item_category_id }}">{{ cat.item_category_name }}</option>{% endfor %}`;
+      </script>
+
+      <script>
+            document.querySelectorAll(".btn.action.delete-item").forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    let itemId = this.getAttribute("data-value"); // Extract item_id from button
+
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Yes, delete it!",
+                        cancelButtonText: "Cancel"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            fetch(`/manage-items/${itemId}`, {
+                                method: "DELETE",
+                                headers: { "Content-Type": "application/json" }
+                            })
+                            .then(res => {
+                                if (!res.ok) {
+                                    return res.json().then(err => { throw new Error(err.message); });
+                                }
+                                return res.json();
+                            })
+                            .then(response => {
+                                Swal.fire("Deleted!", response.message, "success").then(() => location.reload());
+                            })
+                            .catch(error => {
+                                Swal.fire("Error!", error.message || "Failed to delete item.", "error");
+                            });
+                        }
+                    });
+                });
+            });
+
+
+            document.querySelectorAll(".edit-item").forEach(button => {
+                button.addEventListener("click", function () {
+                    let itemId = this.getAttribute("data-value");
+                    let currentCategoryId = this.getAttribute("data-category"); // Assuming you set this on the button
+
+                    // Get existing values from table row
+                    let row = this.closest("tr");
+                    let itemName = row.cells[0].textContent.trim();
+                    let itemDescription = row.cells[1].textContent.trim();
+                    let itemCategory = row.cells[2].textContent.trim();
+                    let itemPrice = row.cells[3].textContent.replace("₱: ", "").trim();
+                    let itemMeasurement = row.cells[5].textContent.trim();
+
+                    // Build Swal HTML with inputs and category select (using the pre-rendered categoryOptions)
+                    let swalHtml = `
+                        <input id="swal-item-name" class="swal2-input" placeholder="Item Name" value="${itemName}">
+                        <input id="swal-item-description" class="swal2-input" placeholder="Description" value="${itemDescription}">
+                        <input id="swal-item-price" type="number" class="swal2-input" placeholder="Price" value="${itemPrice}">
+                        <select id="swal-item-measurement" class="swal2-input" required style="margin-top: 10px;">
+                            <option value="${itemMeasurement}" selected>${itemMeasurement}</option>
+                            <option value="Kilogram (kg)">Kilogram (kg)</option>
+                            <option value="Gram (g)">Gram (g)</option>
+                            <option value="Pound (lb)">Pound (lb)</option>
+                            <option value="Milliliter (ml)">Milliliter (ml)</option>
+                            <option value="Liter (L)">Liter (L)</option>
+                            <option value="Pieces (pcs)">Pieces (pcs)</option>
+                        </select>
+                        <select id="swal-item-category" class="swal2-input" required style="margin-top: 10px;">
+                            ${categoryOptions}
+                        </select>
+                    `;
+
+                    Swal.fire({
+                        title: "Edit Item",
+                        html: swalHtml,
+                        focusConfirm: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Save Changes",
+                        preConfirm: () => {
+                            return {
+                                item_name: document.getElementById("swal-item-name").value,
+                                item_description: document.getElementById("swal-item-description").value,
+                                item_price: document.getElementById("swal-item-price").value,
+                                item_measurement: document.getElementById("swal-item-measurement").value,
+                                item_category_id: document.getElementById("swal-item-category").value
+                            };
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let updatedData = result.value;
+                            // Send AJAX request to update item
+                            fetch(`/edit-item-details/${itemId}`, {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(updatedData)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    Swal.fire("Success!", "Item updated successfully.", "success").then(() => {
+                                        location.reload(); // Reload to reflect changes
+                                    });
+                                } else {
+                                    Swal.fire("Error", data.message, "error");
+                                }
+                            })
+                            .catch(() => Swal.fire("Error", "Something went wrong!", "error"));
+                        }
+                    });
+
+                    // Set the selected category value to currentCategoryId
+                    // We delay it slightly to ensure Swal content is rendered
+                    setTimeout(() => {
+                        document.getElementById("swal-item-category").value = currentCategoryId;
+                    }, 100);
+                });
+            });
+
+            document.querySelectorAll(".btn.action.edit-quantity").forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault(); // Prevent default link behavior
+
+                    let itemId = this.getAttribute("data-value"); // Extract item_id from URL
+                    console.log("item id:", itemId)
+                    // Fetch item details from the backend
+                    fetch(`/manage-items/${itemId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            Swal.fire({
+                                title: `Manage Item: ${data.item_name}`,
+                                html: `
+                                    <table style="width:100%; text-align:left;">
+                                        <tr><th>Item Name:</th><td>${data.item_name}</td></tr>
+                                        <tr><th>Category:</th><td>${data.category_name}</td></tr>
+                                        <tr><th>Description:</th><td>${data.item_description}</td></tr>
+                                        <tr><th>Stock:</th><td id="stock-count">${data.item_stock}</td></tr>
+                                        <tr><th>Added At:</th><td>${data.added_at}</td></tr>
+                                        <tr><th>Updated At:</th><td>${data.updated_at}</td></tr>
+                                    </table>
+                                    <br>
+                                    <input id="quantity" type="number" class="swal2-input" placeholder="Enter Quantity">
+                                `,
+                                showCancelButton: true,
+                                confirmButtonText: "Increase Stock",
+                                denyButtonText: "Decrease Stock",
+                                showDenyButton: true,
+                                preConfirm: () => {
+                                    let quantity = document.getElementById("quantity").value;
+                                    if (!quantity || quantity <= 0) {
+                                        Swal.showValidationMessage("Enter a valid quantity.");
+                                        return false;
+                                    }
+                                    return { quantity, action: "increase" };
+                                },
+                                preDeny: () => {
+                                    let quantity = document.getElementById("quantity").value;
+                                    if (!quantity || quantity <= 0) {
+                                        Swal.showValidationMessage("Enter a valid quantity.");
+                                        return false;
+                                    }
+                                    return { quantity, action: "decrease" };
+                                }
+                            }).then(result => {
+                                if (result.isConfirmed || result.isDenied) {
+                                    let actionType = result.isConfirmed ? "increase" : "decrease";
+
+                                    // Send request to update stock
+                                    fetch("/update-item", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                            item_id: data.item_id,
+                                            item_quantity: result.value.quantity,
+                                            action_type: actionType
+                                        })
+                                    })
+                                    .then(res => {
+                                        if (!res.ok) {
+                                            return res.json().then(err => { throw new Error(err.message); });
+                                        }
+                                        return res.json();
+                                    })
+                                    .then(response => {
+                                        Swal.fire("Success!", response.message, "success").then(() => location.reload());
+                                    })
+                                    .catch(error => {
+                                        Swal.fire("Error!", error.message || "Failed to update stock.", "error");
+                                    });
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            Swal.fire("Error!", "Failed to fetch item details.", "error");
+                        });
+                });
+            });
+            document.getElementById("openAddItem").addEventListener("click", function () {
+                Swal.fire({
+                    title: "Add New Item",
+                    html: `
+                        <input id="item_name" type="text" class="swal2-input" placeholder="Item Name" required>
+                        <input id="item_price" type="number" class="swal2-input" placeholder="Item Price" required>
+                        <input id="item_description" type="text" class="swal2-input" placeholder="Item Description" required>
+                        <select id="item_measurement" class="swal2-input" required style="margin-top: 10px;">
+                          <option value="" disabled selected>Select Measurement</option>
+                          <option value="Kilogram (kg)">Kilogram (kg)</option>
+                          <option value="Gram (g)">Gram (g)</option>
+                          <option value="Pound (lb)">Pound (lb)</option>
+                          <option value="Milliliter (ml)">Milliliter (ml)</option>
+                          <option value="Liter (L)">Liter (L)</option>
+                          <option value="Pieces (pcs)">Pieces (pcs)</option>
+                      </select>
+                        <input id="item_stock" type="number" class="swal2-input" placeholder="Item Quantity">
+                        <select id="item_category_id" class="swal2-input" required style="margin-top: 10px;">
+                            {% for i in all_categories %}
+                                <option value="{{ i.item_category_id }}">{{ i.item_category_name }}</option>
+                            {% endfor %}
+                        </select>
+                    `,
+                    focusConfirm: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Add",
+                    preConfirm: () => {
+                        let itemData = {
+                            item_name: document.getElementById("item_name").value,
+                            item_price: document.getElementById("item_price").value,
+                            item_description: document.getElementById("item_description").value,
+                            item_stock: document.getElementById("item_stock").value,
+                            item_measurement: document.getElementById("item_measurement").value,
+                            item_category_id: document.getElementById("item_category_id").value
+                        };
+
+                        return fetch("/manage-items", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(itemData)
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error("Failed to add item.");
+                            return response.json();
+                        })
+                        .then(data => {
+                            Swal.fire("Success!", data.message, "success").then(() => location.reload());
+                        })
+                        .catch(error => {
+                            Swal.fire("Error!", error.message, "error");
+                        });
+                    }
+                });
+            });
+
+      </script>
+
+</body>
+</html>

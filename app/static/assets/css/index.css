@@ -1,0 +1,13 @@
+#reader video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover; /* Ensures it covers the space */
+    transform: scaleX(-1); /* Flip horizontally */
+}
+#reader {
+    width: 500px !important;
+    height: 500px !important;
+}
+#user-sidebar {
+    background: #E2C256 !important;;
+}

@@ -1,7 +1,7 @@
 from flask import Flask
 from app.config import AppConfig
 from app.main import main
-from app.models import Attendance, Inventory, QRCodes, Users, db
+from app.models import Attendance, Inventory, QRCodes, Users, Item, ItemCategory, db
 from flask_migrate import Migrate
 
 def create_app():
@@ -11,7 +11,7 @@ def create_app():
     db.init_app(app)
     migrate = Migrate(app, db)
     with app.app_context():
-        Attendance, Inventory, QRCodes, Users
+        Attendance, Inventory, QRCodes, Users, Item, ItemCategory
         db.create_all()
 
     return app
